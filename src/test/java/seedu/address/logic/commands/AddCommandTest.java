@@ -6,8 +6,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.junit.Rule;
@@ -21,6 +23,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.appointment.Appointment;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
@@ -98,9 +101,20 @@ public class AddCommandTest {
      * A default model stub that have all of the methods failing.
      */
     private class ModelStub implements Model {
+
+        @Override
+        public void replaceTag(List<Tag> tagList) {
+            fail("This method should not be called.");
+        }
+
         @Override
         public void addPerson(Person person) throws DuplicatePersonException {
             fail("This method should not be called.");
+        }
+
+        @Override
+        public void addPage(Person person) throws IOException {
+
         }
 
         @Override
@@ -142,7 +156,12 @@ public class AddCommandTest {
         }
 
         @Override
-        public void sortPersonListByName() {
+        public void sortPersonList(String parameter) {
+            fail("This method should not be called");
+        }
+
+        @Override
+        public void addAppointment(Appointment appointment) {
             fail("This method should not be called");
         }
     }
