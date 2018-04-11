@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import seedu.address.model.person.exceptions.InvalidSubjectCombinationException;
 import seedu.address.model.subject.Subject;
 import seedu.address.model.subject.UniqueSubjectList;
 import seedu.address.model.tag.Tag;
@@ -30,12 +29,13 @@ public class Person {
     private final Remark remark;
     private final Cca cca;
     private final InjuriesHistory injuriesHistory;
+    private final NameOfKin nameOfKin;
 
     /**
      * Every field must be present and not null.
      */
     public Person(Name name, Nric nric, Set<Tag> tags, Set<Subject> subjects, Remark remark, Cca cca,
-                  InjuriesHistory injuriesHistory) {
+                  InjuriesHistory injuriesHistory, NameOfKin nameOfKin) {
         requireAllNonNull(name, nric, tags, subjects, cca);
         this.name = name;
         this.nric = nric;
@@ -45,6 +45,7 @@ public class Person {
         this.remark = remark;
         this.cca = cca;
         this.injuriesHistory = injuriesHistory;
+        this.nameOfKin = nameOfKin;
     }
 
     public Name getName() {
@@ -65,6 +66,10 @@ public class Person {
 
     public InjuriesHistory getInjuriesHistory() {
         return injuriesHistory;
+    }
+
+    public NameOfKin getNameOfKin() {
+        return nameOfKin;
     }
 
     /**
@@ -88,18 +93,17 @@ public class Person {
 
     public List<Subject> getSubjectArray () {
         Set<Subject> set = getSubjects();
-        List<Subject> list = new ArrayList<Subject>();
+        List<Subject> list = new ArrayList<>();
         list.addAll(set);
         return list;
     }
-
 
     //@@author TeyXinHui
     /**
      * Calculates the lowest possible score from the grades of the subjects of the selected person.
      * @return L1R5 score
      */
-    public int calculateL1R5() throws InvalidSubjectCombinationException {
+    public int calculateL1R5() {
         int score = 0;
         Set<Subject> subjects = new HashSet<>(this.getSubjects());
         Set<Subject> subjectsToCheck = new HashSet<>();
@@ -143,7 +147,7 @@ public class Person {
             }
             // Check that if the student has at least one subject in each L1R5 category, else return error message
             if (checkLowest(subjectsToCheck, subjects) == 10) {
-                throw new InvalidSubjectCombinationException();
+                score = 0;
             } else {
                 score += checkLowest(subjectsToCheck, subjects);
             }
@@ -157,7 +161,7 @@ public class Person {
      * Calculates the lowest possible score from the grades of the subjects of the selected person.
      * @return L1B4-A score
      */
-    public int calculateL1B4A() throws InvalidSubjectCombinationException {
+    public int calculateL1B4A() {
         int score = 0;
         Set<Subject> subjects = new HashSet<>(this.getSubjects());
         Set<Subject> subjectsToCheck = new HashSet<>();
@@ -195,7 +199,7 @@ public class Person {
             }
             // Check that if the student has at least one subject in each L1R5 category, else return error message
             if (checkLowest(subjectsToCheck, subjects) == 10) {
-                throw new InvalidSubjectCombinationException();
+                score = 0;
             } else {
                 score += checkLowest(subjectsToCheck, subjects);
             }
@@ -208,7 +212,7 @@ public class Person {
      * Calculates the lowest possible score from the grades of the subjects of the selected person.
      * @return L1B4-B score
      */
-    public int calculateL1B4B() throws InvalidSubjectCombinationException {
+    public int calculateL1B4B() {
         int score = 0;
         Set<Subject> subjects = new HashSet<>(this.getSubjects());
         Set<Subject> subjectsToCheck = new HashSet<>();
@@ -246,7 +250,7 @@ public class Person {
             }
             // Check that if the student has at least one subject in each L1R5 category, else return error message
             if (checkLowest(subjectsToCheck, subjects) == 10) {
-                throw new InvalidSubjectCombinationException();
+                score = 0;
             } else {
                 score += checkLowest(subjectsToCheck, subjects);
             }
@@ -259,7 +263,7 @@ public class Person {
      * Calculates the lowest possible score from the grades of the subjects of the selected person.
      * @return L1B4-C score
      */
-    public int calculateL1B4C() throws InvalidSubjectCombinationException {
+    public int calculateL1B4C() {
         int score = 0;
         Set<Subject> subjects = new HashSet<>(this.getSubjects());
         Set<Subject> subjectsToCheck = new HashSet<>();
@@ -295,9 +299,9 @@ public class Person {
                     break;
                 }
             }
-            // Check that if the student has at least one subject in each L1R5 category, else return error message
+            // Check that if the student has at least one subject in each L1R5 category, else return 0
             if (checkLowest(subjectsToCheck, subjects) == 10) {
-                throw new InvalidSubjectCombinationException();
+                score = 0;
             } else {
                 score += checkLowest(subjectsToCheck, subjects);
             }
@@ -310,7 +314,7 @@ public class Person {
      * Calculates the lowest possible score from the grades of the subjects of the selected person.
      * @return L1B4-D score
      */
-    public int calculateL1B4D() throws InvalidSubjectCombinationException {
+    public int calculateL1B4D() {
         int score = 0;
         Set<Subject> subjects = new HashSet<>(this.getSubjects());
         Set<Subject> subjectsToCheck = new HashSet<>();
@@ -348,7 +352,7 @@ public class Person {
             }
             // Check that if the student has at least one subject in each L1R5 category, else return error message
             if (checkLowest(subjectsToCheck, subjects) == 10) {
-                throw new InvalidSubjectCombinationException();
+                score = 0;
             } else {
                 score += checkLowest(subjectsToCheck, subjects);
             }
@@ -396,7 +400,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, nric, tags, subjects, remark, cca, injuriesHistory);
+        return Objects.hash(name, nric, tags, subjects, remark, cca, injuriesHistory, nameOfKin);
     }
 
     @Override
@@ -413,6 +417,7 @@ public class Person {
                .append(getRemark());
         builder.append(" Cca: ").append(getCca());
         builder.append(" InjuriesHistory: ").append(getInjuriesHistory());
+        builder.append("  NextOfKin: ").append(getNameOfKin());
         return builder.toString();
     }
 
